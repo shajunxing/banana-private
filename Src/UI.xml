@@ -1,0 +1,53 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <Script file="UI.lua"/>
+    <Button name="BananaRecoverCorpseButton" inherits="UIPanelButtonTemplate" parent="GhostFrame" text="ACTION_SPELL_RESURRECT">
+        <Size x="46" y="46"/>
+        <Anchors>
+            <Anchor point="LEFT" relativePoint="RIGHT"/>
+        </Anchors>
+        <Scripts>
+            <OnLoad function="BananaRecoverCorpseButton_OnLoad"/>
+            <OnEvent function="BananaRecoverCorpseButton_OnEvent"/>
+            <OnClick>
+				RetrieveCorpse()
+			</OnClick>
+        </Scripts>
+    </Button>
+    <Button name="BananaCancelCinematicButton" parent="CinematicFrame">
+        <Size x="64" y="64"/>
+        <Anchors>
+            <Anchor point="TOPRIGHT" x="-16" y="-16"/>
+        </Anchors>
+        <Scripts>
+            <OnLoad>
+                self:SetNormalAtlas('128-RedButton-Exit')
+                self:SetHighlightAtlas('128-RedButton-Exit-Highlight')
+                self:SetPushedAtlas('128-RedButton-Exit-Pressed')
+                self:SetDisabledAtlas('128-RedButton-Exit-Disabled')
+            </OnLoad>
+            <OnClick function="CinematicFrame_CancelCinematic"/>
+        </Scripts>
+    </Button>
+    <!-- <Frame name="BananaMovieFrameOverlay" parent="MovieFrame" setAllPoints="true" enableMouse="true">
+        <Frames>
+            <Button name="BananaStopMovieButton" >
+                <Size x="64" y="64"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-16" y="-16"/>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        self:SetNormalAtlas('128-RedButton-Exit')
+                        self:SetHighlightAtlas('128-RedButton-Exit-Highlight')
+                        self:SetPushedAtlas('128-RedButton-Exit-Pressed')
+                        self:SetDisabledAtlas('128-RedButton-Exit-Disabled')
+                    </OnLoad>
+                    <OnClick>
+                        MovieFrame_StopMovie(MovieFrame)
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+    </Frame> -->
+</Ui>

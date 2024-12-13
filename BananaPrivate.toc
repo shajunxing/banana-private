@@ -1,0 +1,9 @@
+## Interface: 110005
+## Title: |cFFFFFF00香蕉私用|r
+## Notes: |cFF00FF66香蕉君的私人专有设置|r
+## Version: 2.0.0
+## IconTexture: Interface\Icons\INV_Misc_Food_23
+## RequiredDeps: BananaPreference
+## SavedVariables: memos
+
+Src\Main.xml

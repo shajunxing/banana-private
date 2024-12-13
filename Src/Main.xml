@@ -1,0 +1,227 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <Script file="Main.lua"/>
+    <Button name="BananaIconButtonTemplate" virtual="true">
+        <Size x="32" y="32"/>
+        <PushedTexture file="Interface\Buttons\UI-Quickslot-Depress"/>
+        <HighlightTexture file="Interface\Buttons\CheckButtonHilight" alphaMode="ADD"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentIcon" setAllPoints="true">
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad function="BananaIconButtonTemplate_OnLoad"/>
+            <OnEnter function="BananaIconButtonTemplate_OnEnter"/>
+            <OnLeave function="BananaIconButtonTemplate_OnLeave"/>
+        </Scripts>
+    </Button>
+    <Button name="BananaSecureIconButtonTemplate" inherits="BananaIconButtonTemplate,SecureActionButtonTemplate" virtual="true">
+        <Scripts>
+            <OnLoad function="BananaSecureIconButtonTemplate_OnLoad"/>
+        </Scripts>
+    </Button>
+    <Button name="BananaPrivateUIButton" inherits="BananaIconButtonTemplate" parent="UIParent" frameLevel="150">
+        <KeyValues>
+            <KeyValue key="icon" value="Interface\Icons\INV_Misc_Food_23"/>
+            <KeyValue key="tooltip" value="香蕉的私用按钮"/>
+        </KeyValues>
+        <Scripts>
+            <OnLoad function="BananaPrivateUIButton_OnLoad"/>
+            <OnClick function="BananaPrivateUIButton_OnClick"/>
+        </Scripts>
+    </Button>
+    <Button name="BananaFStackButton" inherits="BananaSecureIconButtonTemplate" parent="UIParent" frameLevel="150">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="BananaPrivateUIButton" relativePoint="RIGHT" x="4"/>
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="icon" value="Interface\Icons\INV_Misc_Spyglass_03"/>
+            <KeyValue key="tooltip" value="检查界面元素"/>
+        </KeyValues>
+        <Attributes>
+            <Attribute name="type" type="string" value="macro"/>
+            <Attribute name="macrotext" type="string" value="/fstack"/>
+        </Attributes>
+    </Button>
+    <Button name="BananaReloadButton" inherits="BananaSecureIconButtonTemplate" parent="UIParent" frameLevel="150">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="BananaFStackButton" relativePoint="RIGHT" x="4"/>
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="icon" value="Interface\Icons\Ability_Evoker_InnateMagic4"/>
+            <KeyValue key="tooltip" value="重新加载界面"/>
+        </KeyValues>
+        <Attributes>
+            <Attribute name="type" type="string" value="macro"/>
+            <Attribute name="macrotext" type="string" value="/reload"/>
+        </Attributes>
+    </Button>
+    <Button name="BananaLeaveFollowerDungeonButton" inherits="BananaIconButtonTemplate" parent="UIParent" frameLevel="150">
+        <Anchors>
+            <Anchor point="TOP" relativeTo="BananaPrivateUIButton" relativePoint="BOTTOM" y="-4"/>
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="icon" value="Interface\Icons\Rogue_BurstofSpeed"/>
+            <KeyValue key="tooltip" value="离开副本"/>
+        </KeyValues>
+        <Scripts>
+            <OnClick>
+                C_PartyInfo.LeaveParty(LE_PARTY_CATEGORY_INSTANCE)
+                -- local _, _, difficulty_id = GetInstanceInfo()
+                -- if difficulty_id == 205 then -- 追随者地下城
+                    C_PartyInfo.LeaveParty(LE_PARTY_CATEGORY_INSTANCE)
+                -- end
+            </OnClick>
+        </Scripts>
+    </Button>
+    <Button name="BananaEditMemosButton" inherits="BananaIconButtonTemplate" parent="UIParent" frameLevel="150">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="BananaLeaveFollowerDungeonButton" relativePoint="RIGHT" x="4"/>
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="icon" value="Interface\Icons\INV_Misc_Clipboard01"/>
+            <KeyValue key="tooltip" value="编辑备忘录"/>
+        </KeyValues>
+        <Scripts>
+            <OnClick>
+                StaticPopup_ShowCustomGenericInputBox({text = "设置或清除备忘录", callback = function(text)
+                    memos = text
+                    BananaMemosText:SetText(memos)
+                end, cancelCallback = function()
+                    memos = ""
+                    BananaMemosText:SetText(memos)
+                end, acceptText = "设置", cancelText = "清除", maxLetters = 9999})
+            </OnClick>
+        </Scripts>
+    </Button>
+    <Font name="BananaGameFontBlue" inherits="GameFontNormal" virtual="true" >
+        <Color r="0.510" g="0.773" b="1.0"/>
+    </Font>
+    <Button name="BananaBlueButtonTemplate" virtual="true">
+        <Size x="110" y="25"/>
+        <NormalFont style="BananaGameFontBlue"/>
+        <HighlightFont style="GameFontHighlight"/>
+        <DisabledFont style="GameFontDisable"/>
+        <HighlightTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar-Blue" alphaMode="ADD"/>
+    </Button>
+    <!-- 注意里面不能放Secure的东西，否则在战斗中面板的开关讲导致插件失效 -->
+    <Frame name="BananaPrivateUIPanel" inherits="TooltipBackdropTemplate" parent="BananaPrivateUIButton" topLevel="true" enableMouse="true" hidden="true">
+        <Size x="350" y="135"/>
+        <Anchors>
+            <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4"/>
+        </Anchors>
+        <Frames>
+            <Button inherits="FloatingFrameCloseButtonDefaultAnchors"/>
+            <Button name="BananaTalentPresetButton" inherits="BananaBlueButtonTemplate" text="天赋预设">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="10" y="-10"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="BananaTalentPresetButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <Button name="BananaMacroPresetButton" inherits="BananaBlueButtonTemplate" text="宏预设">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="BananaTalentPresetButton" relativePoint="RIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="BananaMacroPresetButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <Button name="BananaActionBarPresetButton" inherits="BananaBlueButtonTemplate" text="动作条预设">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="BananaMacroPresetButton" relativePoint="RIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="BananaActionBarPresetButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <Button name="BananaActionBarCleanupButton" inherits="BananaBlueButtonTemplate" text="动作条清空">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="BananaTalentPresetButton" relativePoint="BOTTOMLEFT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="BananaActionBarCleanupButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <Button name="BananaActionBarCheckButton" inherits="BananaBlueButtonTemplate" text="动作条检查">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="BananaActionBarCleanupButton" relativePoint="RIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="BananaActionBarCheckButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <Button name="BananaWowTokenPriceButton" inherits="BananaBlueButtonTemplate" text="徽章价格">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="BananaActionBarCheckButton" relativePoint="RIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        C_WowTokenPublic.UpdateMarketPrice()
+                        print(TOKEN_FILTER_LABEL, GetMoneyString(C_WowTokenPublic.GetCurrentMarketPrice(), true))
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="BananaInspectTargetButton" inherits="BananaBlueButtonTemplate" text="查看目标">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="BananaActionBarCleanupButton" relativePoint="BOTTOMLEFT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        InspectUnit("target")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="BananaChromieTimeButton" inherits="BananaBlueButtonTemplate" text="时空漫游">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="BananaInspectTargetButton" relativePoint="RIGHT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        local info = C_ChromieTime.GetChromieTimeExpansionOption(UnitChromieTimeID('player'))
+                        local name = info and info.name or NONE
+                        print(string.format(PARTY_PLAYER_CHROMIE_TIME_SELF_LOCATION, name))
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="BananaAltReloadButton" inherits="BananaBlueButtonTemplate" text="重载界面">
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="10"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ReloadUI()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="BananaAltFStackButton" inherits="BananaBlueButtonTemplate" text="检查界面元素">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="BananaAltReloadButton" relativePoint="LEFT"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        UIParentLoadAddOn("Blizzard_DebugTools")
+                        FrameStackTooltip_ToggleDefaults()
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+    </Frame>
+    <Include file="UI.xml"/>
+    <Include file="Class\Druid.lua"/>
+    <Include file="Class\Hunter.lua"/>
+    <Include file="Class\Mage.lua"/>
+    <Include file="Class\Rogue.lua"/>
+    <Include file="Class\DeathKnight.lua"/>
+    <Include file="Class\DemonHunter.lua"/>
+    <Include file="Class\Paladin.lua"/>
+    <Include file="Class\Shaman.lua"/>
+    <Include file="Class\Priest.lua"/>
+    <Include file="Class\Warrior.lua"/>
+    <Include file="Class\Warlock.lua"/>
+    <Include file="Class\Monk.lua"/>
+    <Include file="Class\Evoker.lua"/>
+</Ui>
